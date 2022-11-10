@@ -638,8 +638,6 @@ def main():
         return (losses * weights).mean()
     
     import pickle
-    with open('HCT/mnli-roberta-weight-a0.6-k4.weight', 'rb') as handle:
-        idx2weight = pickle.load(handle)
     # ============================------------------------------
 
 
@@ -657,6 +655,8 @@ def main():
                     continue
         
             if args.train_with_sample_loss:
+                with open('HCT/mnli-roberta-weight-a0.6-k4.weight', 'rb') as handle:
+                    idx2weight = pickle.load(handle)
                 sample_weights = [idx2weight[int(idx)] for idx in batch['idx']]
                 # batch中包含了idx字段，这里需要去除
                 batch = {k:v for k,v in batch.items() if k != 'idx'} 
