@@ -260,9 +260,8 @@ def main():
     def log_to_file(info=None):
         if args.log_name is not None:
             if accelerator.is_local_main_process:
-                if not os.path.exists(f'log/{args.task_name}'):
-                    os.mkdir(f'log/{args.task_name}')
-                with open(f'log/{args.task_name}/{args.log_name}.txt', 'a') as log_f:
+                os.makedirs(f'{args.output_dir}/log/{args.task_name}', exist_ok=True)
+                with open(f'{args.output_dir}/log/{args.task_name}/{args.log_name}.txt', 'a') as log_f:
                     if info is not None:
                         log_f.write(str(info)+'\n')
     
@@ -694,13 +693,7 @@ def main():
         # 每个epoch单独一个文件
         if args.do_recording:
             if accelerator.is_main_process:
-                if not os.path.exists(f'dy_log/{args.task_name}/'):
-                    os.mkdir(f'dy_log/{args.task_name}/')
-                if not os.path.exists(f'dy_log/{args.task_name}/{args.model_name_or_path}'):
-                    os.mkdir(f'dy_log/{args.task_name}/{args.model_name_or_path}')
-                log_path = f'dy_log/{args.task_name}/{args.model_name_or_path}/training_dynamics/'
-                if not os.path.exists(log_path):
-                    os.mkdir(log_path)
+                os.makedirs(f'{args.output_dir}/dy_log/{args.task_name}/{args.model_name_or_path}/training_dynamics/', exist_ok=True)                    
             
             accelerator.wait_for_everyone() # 只在 main process 里面创建文件夹，然后让其他 process 等待 main process 创建完毕
             log_path = f'dy_log/{args.task_name}/{args.model_name_or_path}/training_dynamics/'
