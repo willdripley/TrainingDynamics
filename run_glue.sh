@@ -29,22 +29,23 @@
 # https://huggingface.co/datasets/glue
 
 export TASK_NAME=mnli
-export MODEL=roberta-large
+export MODEL=google/electra-small-discriminator
 # CUDA_VISIBLE_DEVICES=4 python run_glue.py \
 python -m torch.distributed.launch --nproc_per_node 8 --use_env run_glue.py \
   --seed 5 \
   --model_name_or_path $MODEL \
   --task_name $TASK_NAME \
   --checkpointing_steps epoch \
-  --resume_from_checkpoint saved_models/$TASK_NAME/$MODEL/epoch_4 \
+  # --resume_from_checkpoint saved_models/$TASK_NAME/$MODEL/epoch_4 \
   --max_length 128 \
   --per_device_train_batch_size 32 \
   --learning_rate 2e-5 \
-  --num_train_epochs 5 \
+  --num_train_epochs 3 \
   --log_name ambiguous \
-  --continue_train_with_sample_loss \
-  --continue_train \
-  --continue_num_train_epochs 5  \
+  --output_dir saved_models/$TASK_NAME/$MODEL
+  # --continue_train_with_sample_loss \
+  # --continue_train \
+  # --continue_num_train_epochs 5  \
   # --selected_indices_filename selected_indices_ambi_top0.1_balance+ \
   # --do_lwf \
   
