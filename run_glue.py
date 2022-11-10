@@ -696,7 +696,7 @@ def main():
                 os.makedirs(f'{args.output_dir}/dy_log/{args.task_name}/{args.model_name_or_path}/training_dynamics/', exist_ok=True)                    
             
             accelerator.wait_for_everyone() # 只在 main process 里面创建文件夹，然后让其他 process 等待 main process 创建完毕
-            log_path = f'dy_log/{args.task_name}/{args.model_name_or_path}/training_dynamics/'
+            log_path = f'{args.output_dir}dy_log/{args.task_name}/{args.model_name_or_path}/training_dynamics/'
             print('-*-*-*- ',log_path, os.path.exists(log_path),accelerator.device)
 
             logger.info('---------- Recording Training Dynamics (Epoch %s) -----------'%epoch)
