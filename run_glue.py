@@ -204,8 +204,8 @@ def parse_args():
     parser.add_argument("--log_name", type=str, default=None, help='if set, will create a log file recording the metrics')
     parser.add_argument("--selected_indices_filename", type=str)
     parser.add_argument("--do_lwf", action="store_true")
-    parser.add_argument("--train_with_sample_loss", action="store_true")
-    parser.add_argument("--continue_train_with_sample_loss", action="store_true")
+    parser.add_argument("--train_with_sample_loss", default=None,  action="store_true")
+    parser.add_argument("--continue_train_with_sample_loss", default=None, action="store_true")
     args = parser.parse_args()
 
     # Sanity checks
