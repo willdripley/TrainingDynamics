@@ -1,6 +1,7 @@
 # Only applied to training set
 # python data_selection.py --task_name qnli --model_name bert-base-cased --proportion 0.5 --burn_out 4
 import json
+import os
 import random
 random.seed(1)
 import argparse
@@ -67,8 +68,8 @@ ambiguoug: METRIC = 'variability'
 three_regions_data_indices = {'hard':data_selection('confidence', False, PROPORTION)['indices'],
                               'easy':data_selection('confidence', True, PROPORTION)['indices'],
                               'ambiguous':data_selection('variability', False, PROPORTION)['indices']}
-
-with open(f'{OUTPUT_PREFIX}/dy_log/{TASK_NAME}/{MODEL}/three_regions_data_indices.json','w') as f:
+os.makedirs(OUTPUT_PREFIX, exist_ok=True)
+with open(f'{OUTPUT_PREFIX}/three_regions_data_indices.json','w') as f:
     f.write(json.dumps(three_regions_data_indices))
 
 # 然后可以直接跑glue任务，在选择训练集的时候，使用select函数来指定对应样本即可：
