@@ -12,9 +12,11 @@ parser.add_argument("--model_name", type=str)
 parser.add_argument("--proportion", type=float, default=0.33)
 parser.add_argument("--burn_out", type=int)
 parser.add_argument("--training_dynamics_prefix", type=str)
+parser.add_argument("--output_prefix", type=str)
 args = parser.parse_args()
 
 TRAINING_DYNAMICS_PREFIX = args.training_dynamics_prefix
+OUTPUT_PREFIX = args.input_prefix
 TASK_NAME = args.task_name
 MODEL = args.model_name
 PROPORTION = args.proportion
@@ -66,7 +68,7 @@ three_regions_data_indices = {'hard':data_selection('confidence', False, PROPORT
                               'easy':data_selection('confidence', True, PROPORTION)['indices'],
                               'ambiguous':data_selection('variability', False, PROPORTION)['indices']}
 
-with open(f'{TRAINING_DYNAMICS_PREFIX}/dy_log/{TASK_NAME}/{MODEL}/three_regions_data_indices.json','w') as f:
+with open(f'{output_prefix}/dy_log/{TASK_NAME}/{MODEL}/three_regions_data_indices.json','w') as f:
     f.write(json.dumps(three_regions_data_indices))
 
 # 然后可以直接跑glue任务，在选择训练集的时候，使用select函数来指定对应样本即可：
