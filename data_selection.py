@@ -16,7 +16,7 @@ parser.add_argument("--output_prefix", type=str)
 args = parser.parse_args()
 
 TRAINING_DYNAMICS_PREFIX = args.training_dynamics_prefix
-OUTPUT_PREFIX = args.input_prefix
+OUTPUT_PREFIX = args.output_prefix
 TASK_NAME = args.task_name
 MODEL = args.model_name
 PROPORTION = args.proportion
