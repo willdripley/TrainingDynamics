@@ -199,6 +199,7 @@ def parse_args():
     parser.add_argument("--with_data_selection", action="store_true", help="Use only a selected subset of the training data for model training.")
     parser.add_argument("--data_selection_region", default=None, choices=("easy","hard","ambiguous"), 
                          help="Three regions from the dataset cartography: easy, hard and ambiguous")
+    parser.add_argument("--data_selection_region_extra", default=None, choices=("easy","hard","ambiguous"))
     parser.add_argument("--data_selection_region_prefix", type=str)
     parser.add_argument("--continue_train", action="store_true")
     parser.add_argument("--continue_num_train_epochs", type=int, default=5)
@@ -347,10 +348,12 @@ def main():
         model_name = args.model_name_or_path
         if '/' in model_name:
             model_name = model_name.split('/')[-1]
-        assert os.path.exists(f'{args.data_selection_region_prefix}/dy_log/{args.task_name}/{model_name}/three_regions_data_indices.json'), "Selection indices file not found!"
-        with open(f'{args.data_selection_region_prefix}/dy_log/{args.task_name}/{model_name}/three_regions_data_indices.json','r') as f:
+        assert os.path.exists(f'{args.data_selection_region_prefix}/three_regions_data_indices.json'), "Selection indices file not found!"
+        with open(f'{args.data_selection_region_prefix}/three_regions_data_indices.json','r') as f:
             three_regions_data_indices = json.loads(f.read())
         selected_indices = three_regions_data_indices[args.data_selection_region]
+        if args.data_selection_region_extra:
+            selected_indices += three_region_data_indices[args.data_selection_region_extra]
         raw_datasets['train'] = raw_datasets['train'].select(selected_indices)
 
         logger.info("~~~~~ Applying Data Selection ~~~~~ ")
