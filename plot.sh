@@ -8,7 +8,7 @@
 # roberta-large
 
 export TASK_NAME=mnli
-export MODEL=google/electra
+export MODEL=electra-small-discriminator
 python -m dy_filtering \
     --plot \
     --task_name $TASK_NAME \
