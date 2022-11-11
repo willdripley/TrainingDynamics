@@ -346,8 +346,8 @@ def main():
         model_name = args.model_name_or_path
         if '/' in model_name:
             model_name = model_name.split('/')[-1]
-        assert os.path.exists(f'dy_log/{args.task_name}/{model_name}/three_regions_data_indices.json'), "Selection indices file not found!"
-        with open(f'dy_log/{args.task_name}/{model_name}/three_regions_data_indices.json','r') as f:
+        assert os.path.exists(f'{args.output_dir}/dy_log/{args.task_name}/{model_name}/three_regions_data_indices.json'), "Selection indices file not found!"
+        with open(f'{args.output_dir}/dy_log/{args.task_name}/{model_name}/three_regions_data_indices.json','r') as f:
             three_regions_data_indices = json.loads(f.read())
         selected_indices = three_regions_data_indices[args.data_selection_region]
         raw_datasets['train'] = raw_datasets['train'].select(selected_indices)
