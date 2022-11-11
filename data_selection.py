@@ -11,7 +11,7 @@ parser.add_argument("--task_name", type=str)
 parser.add_argument("--model_name", type=str)
 parser.add_argument("--proportion", type=float, default=0.33)
 parser.add_argument("--burn_out", type=int)
-parser.add_argument("--train_dynamics_prefix", type=str)
+parser.add_argument("--training_dynamics_prefix", type=str)
 args = parser.parse_args()
 
 TRAINING_DYNAMICS_PREFIX = args.training_dynamics_prefix
