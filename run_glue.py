@@ -353,7 +353,7 @@ def main():
             three_regions_data_indices = json.loads(f.read())
         selected_indices = three_regions_data_indices[args.data_selection_region]
         if args.data_selection_region_extra:
-            selected_indices += three_region_data_indices[args.data_selection_region_extra]
+            selected_indices += three_regions_data_indices[args.data_selection_region_extra]
         raw_datasets['train'] = raw_datasets['train'].select(selected_indices)
 
         logger.info("~~~~~ Applying Data Selection ~~~~~ ")
