@@ -15,6 +15,7 @@ python -m dy_filtering \
     --model_dir /content/drive/MyDrive/trainingCarto/mnli/electra/dy_log/$TASK_NAME/$MODEL \
     --plots_dir /content/drive/MyDrive/trainingCarto/mnli/electra/dy_log/$TASK_NAME/$MODEL \
     --filtering_output_dir /content/drive/MyDrive/trainingCarto/mnli/electra/dy_log/$TASK_NAME/$MODEL/filtered \
+    --filter \
     --model $MODEL \
     --burn_out 3
 
