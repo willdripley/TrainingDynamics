@@ -7,13 +7,13 @@
 # distilbert-base-cased
 # roberta-large
 
-export TASK_NAME=rte-noisy-0.4
-export MODEL=bert-base-cased
+export TASK_NAME=mnli
+export MODEL=google/electra
 python -m dy_filtering \
     --plot \
     --task_name $TASK_NAME \
-    --model_dir dy_log/$TASK_NAME/$MODEL \
-    --plots_dir dy_log/$TASK_NAME/$MODEL \
+    --model_dir /content/drive/MyDrive/trainingCarto/mnli/electra/dy_log/$TASK_NAME/$MODEL \
+    --plots_dir /content/drive/MyDrive/trainingCarto/mnli/electra/dy_log/$TASK_NAME/$MODEL \
     --model $MODEL \
-    --burn_out 5
+    --burn_out 3
 
