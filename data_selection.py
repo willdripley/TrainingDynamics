@@ -11,14 +11,16 @@ parser.add_argument("--task_name", type=str)
 parser.add_argument("--model_name", type=str)
 parser.add_argument("--proportion", type=float, default=0.33)
 parser.add_argument("--burn_out", type=int)
+parser.add_argument("--train_dynamics_prefix", type=str)
 args = parser.parse_args()
 
+TRAINING_DYNAMICS_PREFIX = args.training_dynamics_prefix
 TASK_NAME = args.task_name
 MODEL = args.model_name
 PROPORTION = args.proportion
 
 # 读取并合并到一个文件
-td = read_training_dynamics(f'dy_log/{TASK_NAME}/{MODEL}/')
+td = read_training_dynamics(f'{TRAINING_DYNAMICS_PREFIX}/dy_log/{TASK_NAME}/{MODEL}/')
 # 计算 metrics，转化成一个 dataframe
 td_df, _ = compute_train_dy_metrics(td, burn_out=args.burn_out)
 
@@ -64,7 +66,7 @@ three_regions_data_indices = {'hard':data_selection('confidence', False, PROPORT
                               'easy':data_selection('confidence', True, PROPORTION)['indices'],
                               'ambiguous':data_selection('variability', False, PROPORTION)['indices']}
 
-with open(f'dy_log/{TASK_NAME}/{MODEL}/three_regions_data_indices.json','w') as f:
+with open(f'{TRAINING_DYNAMICS_PREFIX}/dy_log/{TASK_NAME}/{MODEL}/three_regions_data_indices.json','w') as f:
     f.write(json.dumps(three_regions_data_indices))
 
 # 然后可以直接跑glue任务，在选择训练集的时候，使用select函数来指定对应样本即可：
