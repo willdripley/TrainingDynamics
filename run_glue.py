@@ -197,7 +197,7 @@ def parse_args():
     )
     parser.add_argument("--do_recording", action="store_true", help="Whether to record the training dynamics.")
     parser.add_argument("--with_data_selection", action="store_true", help="Use only a selected subset of the training data for model training.")
-    parser.add_argument("--data_selection_region", default=None, choices=("easy","hard","ambiguous"), 
+    parser.add_argument("--data_selection_region", default=None, choices=("easy","hard","ambiguous", "all"), 
                          help="Three regions from the dataset cartography: easy, hard and ambiguous")
     parser.add_argument("--data_selection_region_extra", default=None, choices=("easy","hard","ambiguous"))
     parser.add_argument("--data_selection_region_prefix", type=str)
@@ -351,11 +351,16 @@ def main():
         assert os.path.exists(f'{args.data_selection_region_prefix}/three_regions_data_indices.json'), "Selection indices file not found!"
         with open(f'{args.data_selection_region_prefix}/three_regions_data_indices.json','r') as f:
             three_regions_data_indices = json.loads(f.read())
-        selected_indices = three_regions_data_indices[args.data_selection_region]
-        if args.data_selection_region_extra:
-            print('selected_indices len before extra:', len(selected_indices))
-            selected_indices += three_regions_data_indices[args.data_selection_region_extra]
-            print('selected_indices len after extra:', len(selected_indices))
+        selected_indices = []
+        if args.data_selection_region == "all":
+            # Specially constructed percentages
+            selected_indices = three_regions_data_indices["easy"] + three_regions_data_indices["hard"] + three_regions_data_indices["ambiguous"]
+        else:
+            selected_indices = three_regions_data_indices[args.data_selection_region]
+            if args.data_selection_region_extra:
+                print('selected_indices len before extra:', len(selected_indices))
+                selected_indices += three_regions_data_indices[args.data_selection_region_extra]
+                print('selected_indices len after extra:', len(selected_indices))
         raw_datasets['train'] = raw_datasets['train'].select(selected_indices)
 
         logger.info("~~~~~ Applying Data Selection ~~~~~ ")
