@@ -200,6 +200,7 @@ def parse_args():
     parser.add_argument("--data_selection_region", default=None, choices=("easy","hard","ambiguous", "all"), 
                          help="Three regions from the dataset cartography: easy, hard and ambiguous")
     parser.add_argument("--data_selection_region_extra", default=None, choices=("easy","hard","ambiguous"))
+    parser.add_argument("--enable_proper_noun_featurization", type=bool, default=False)
     parser.add_argument("--data_selection_region_prefix", type=str)
     parser.add_argument("--continue_train", action="store_true")
     parser.add_argument("--continue_num_train_epochs", type=int, default=5)
@@ -448,11 +449,39 @@ def main():
 
     padding = "max_length" if args.pad_to_max_length else False
 
+    parse_tree_sentence_1 = "premise_parse"
+    parse_tree_sentence_2 = "hypothesis_parse"
+
+    def get_proper_nouns(sentence):
+        words = sentence.split(' ')
+        index = 0
+        proper_nouns = []
+        while index < len(words) - 1:
+            if index + 1 < len(words):
+                first_word = words[index].lstrip("(")
+                second_word = words[index + 1].lstrip(")")
+                if first_word = "NNP" or first_word = "NNPS":
+                    proper_nouns.append(second_word)
+            index += 1     
+        return proper_nouns
+
+
     def preprocess_function(examples):
-        # Tokenize the texts
-        texts = (
-            (examples[sentence1_key],) if sentence2_key is None else (examples[sentence1_key], examples[sentence2_key])
-        )
+        texts = None
+        if args.enable_proper_noun_featurization:
+            for example in examples:
+                sentence_1_proper_nouns = get_proper_nouns(sentence[parse_tree_sentence_1])
+                sentence_2_proper_nouns = get_proper_nouns(sentence[parse_tree_sentence_2])
+                example["sentence_1_proper_nouns"] = sentence_1_proper_nouns
+                example["sentence_2_proper_nouns"] = sentence_2_proper_nouns
+            texts = ((examples[sentence1_key], examples[sentence2_key], examples[sentence_1_proper_nouns], examples[sentence_2_proper_nouns]))
+
+        else:
+            # Tokenize the texts
+            texts = (
+                (examples[sentence1_key],) if sentence2_key is None else (examples[sentence1_key], examples[sentence2_key])
+            )
+
         result = tokenizer(*texts, padding=padding, max_length=args.max_length, truncation=True)
 
         if "label" in examples:
