@@ -460,7 +460,7 @@ def main():
             if index + 1 < len(words):
                 first_word = words[index].lstrip("(")
                 second_word = words[index + 1].lstrip(")")
-                if first_word = "NNP" or first_word = "NNPS":
+                if first_word == "NNP" or first_word == "NNPS":
                     proper_nouns.append(second_word)
             index += 1     
         return proper_nouns
