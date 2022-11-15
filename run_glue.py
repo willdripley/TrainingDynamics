@@ -465,9 +465,8 @@ def main():
             index += 1     
         return proper_nouns
 
-# 
+    # https://huggingface.co/docs/datasets/process#map
     def proper_noun_features(example):
-
         sentence_1_proper_nouns = get_proper_nouns(example[parse_tree_sentence_1])
         sentence_2_proper_nouns = get_proper_nouns(example[parse_tree_sentence_2])
         example["sentence_1_proper_nouns"] = sentence_1_proper_nouns
@@ -477,12 +476,6 @@ def main():
     def preprocess_function(examples):
         texts = None
         if args.enable_proper_noun_featurization:
-            print('asdf examples:', examples)
-            for example in examples:
-                sentence_1_proper_nouns = get_proper_nouns(example[parse_tree_sentence_1])
-                sentence_2_proper_nouns = get_proper_nouns(example[parse_tree_sentence_2])
-                example["sentence_1_proper_nouns"] = sentence_1_proper_nouns
-                example["sentence_2_proper_nouns"] = sentence_2_proper_nouns
             texts = ((examples[sentence1_key], examples[sentence2_key], examples[sentence_1_proper_nouns], examples[sentence_2_proper_nouns]))
 
         else:
@@ -503,6 +496,9 @@ def main():
         return result
 
     with accelerator.main_process_first():
+        if args.enable_proper_noun_featurization:
+            raw_datasets.map(proper_noun_features)
+            print("asdf", raw_datasets["train"]["sentence_1_proper_nouns"][0])
         processed_datasets = raw_datasets.map(
             preprocess_function,
             batched=True,
