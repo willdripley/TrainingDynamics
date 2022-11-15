@@ -275,6 +275,9 @@ def main():
     log_to_file("- Key params:")
     log_to_file(args_str)
 
+    def prompt_id_to_idx(examples):
+        examples["idx"] = examples["prompt_id"]
+
     # Get the datasets: you can either provide your own CSV/JSON training and evaluation files (see below)
     # or specify a GLUE benchmark task (the dataset will be downloaded automatically from the datasets Hub).
 
@@ -302,7 +305,7 @@ def main():
         elif 'noisy' in args.task_name:
             raw_datasets = load_from_disk(f"datasets/{args.task_name}/with_idx")
         elif args.task_name == "mnli":
-            raw_datasets = load_dataset("multi_nli")
+            raw_datasets = load_dataset("multi_nli").map(prompt_id_to_idx)
         else:
             raw_datasets = load_dataset("glue", args.task_name)
     else:
