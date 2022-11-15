@@ -277,6 +277,7 @@ def main():
 
     def prompt_id_to_idx(examples):
         examples["idx"] = examples["promptID"]
+        return examples
 
     # Get the datasets: you can either provide your own CSV/JSON training and evaluation files (see below)
     # or specify a GLUE benchmark task (the dataset will be downloaded automatically from the datasets Hub).
@@ -476,6 +477,7 @@ def main():
         sentence_2_proper_nouns = get_proper_nouns(example[parse_tree_sentence_2])
         example["sentence_1_proper_nouns"] = sentence_1_proper_nouns
         example["sentence_2_proper_nouns"] = sentence_2_proper_nouns
+        return example
 
 
     def preprocess_function(examples):
