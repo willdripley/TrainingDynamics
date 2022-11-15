@@ -504,7 +504,7 @@ def main():
 
     with accelerator.main_process_first():
         if args.enable_proper_noun_featurization:
-            raw_datasets.map(proper_noun_features)
+            raw_datasets = raw_datasets.map(proper_noun_features)
             print("asdf", raw_datasets["train"]["sentence_1_proper_nouns"][0])
         processed_datasets = raw_datasets.map(
             preprocess_function,
