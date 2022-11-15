@@ -276,7 +276,7 @@ def main():
     log_to_file(args_str)
 
     def prompt_id_to_idx(examples):
-        examples["idx"] = examples["prompt_id"]
+        examples["idx"] = examples["promptId"]
 
     # Get the datasets: you can either provide your own CSV/JSON training and evaluation files (see below)
     # or specify a GLUE benchmark task (the dataset will be downloaded automatically from the datasets Hub).
