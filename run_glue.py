@@ -472,7 +472,6 @@ def main():
 
     # https://huggingface.co/docs/datasets/process#map
     def proper_noun_features(example):
-        print('asdf example:', example)
         sentence_1_proper_nouns = get_proper_nouns(example[parse_tree_sentence_1])
         sentence_2_proper_nouns = get_proper_nouns(example[parse_tree_sentence_2])
         example["sentence_1_proper_nouns"] = sentence_1_proper_nouns
