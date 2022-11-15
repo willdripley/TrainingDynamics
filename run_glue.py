@@ -461,15 +461,17 @@ def main():
     def get_proper_nouns(sentence):
         words = sentence.split(' ')
         index = 0
-        proper_nouns = []
+        proper_nouns = set()
         while index < len(words) - 1:
             if index + 1 < len(words):
                 first_word = words[index].lstrip("(")
                 second_word = words[index + 1].lstrip(")")
                 if first_word == "NNP" or first_word == "NNPS":
-                    proper_nouns.append(second_word)
-            index += 1     
-        return proper_nouns
+                    proper_nouns.add(second_word.lower())
+            index += 1
+        l = list(proper_nouns)
+        l.sort()
+        return l
 
     # https://huggingface.co/docs/datasets/process#map
     def proper_noun_features(example):
