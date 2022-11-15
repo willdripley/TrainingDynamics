@@ -301,6 +301,8 @@ def main():
             raw_datasets = load_dataset("super_glue", args.task_name)
         elif 'noisy' in args.task_name:
             raw_datasets = load_from_disk(f"datasets/{args.task_name}/with_idx")
+        elif args.task_name == "mnli":
+            raw_datasets = load_dataset("multi_nli")
         else:
             raw_datasets = load_dataset("glue", args.task_name)
     else:
