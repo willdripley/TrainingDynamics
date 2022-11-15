@@ -483,7 +483,7 @@ def main():
     def preprocess_function(examples):
         texts = None
         if args.enable_proper_noun_featurization:
-            texts = ((examples[sentence1_key], examples[sentence2_key], examples[sentence_1_proper_nouns], examples[sentence_2_proper_nouns]))
+            texts = ((examples[sentence1_key], examples[sentence2_key], examples["sentence_1_proper_nouns"], examples["sentence_2_proper_nouns"]))
 
         else:
             # Tokenize the texts
@@ -505,7 +505,7 @@ def main():
     with accelerator.main_process_first():
         if args.enable_proper_noun_featurization:
             raw_datasets = raw_datasets.map(proper_noun_features)
-            print("asdf", raw_datasets["train"]["sentence_1_proper_nouns"][0])
+            print("asdf", raw_datasets["train"]["sentence_1_proper_nouns"][10])
         processed_datasets = raw_datasets.map(
             preprocess_function,
             batched=True,
