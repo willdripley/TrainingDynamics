@@ -469,8 +469,9 @@ def main():
     def preprocess_function(examples):
         texts = None
         if args.enable_proper_noun_featurization:
+            sentence_1_proper_nouns
+            print('asdf examples:', examples)
             for example in examples:
-                print('asdf:', example)
                 sentence_1_proper_nouns = get_proper_nouns(example[parse_tree_sentence_1])
                 sentence_2_proper_nouns = get_proper_nouns(example[parse_tree_sentence_2])
                 example["sentence_1_proper_nouns"] = sentence_1_proper_nouns
