@@ -328,7 +328,7 @@ def main():
 
     # Labels
     if args.nli_diagnostics:
-        label_list = [-1,0,1]
+        label_list = ["entailment", "neutral", "contradiction"]
         num_labels = 3
         is_regression = False
     elif args.task_name is not None:
@@ -512,7 +512,7 @@ def main():
     with accelerator.main_process_first():
         if args.enable_proper_noun_featurization:
             raw_datasets = raw_datasets.map(proper_noun_features)
-            print("asdf", raw_datasets["train"]["sentence_1_proper_nouns"][1:100])
+            # print("asdf", raw_datasets["train"]["sentence_1_proper_nouns"][1:100])
         processed_datasets = raw_datasets.map(
             preprocess_function,
             batched=True,
