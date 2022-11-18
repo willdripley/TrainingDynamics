@@ -326,7 +326,10 @@ def main():
 
 
     # Labels
-    if args.task_name is not None or args.nli_diagnostics:
+    if args.nli_diagnostics:
+        label_list = ["label"]
+        num_labels = 1
+    elif args.task_name is not None:
         is_regression = args.task_name == "stsb"
         if not is_regression:
             if args.task_name == 'mnli':
