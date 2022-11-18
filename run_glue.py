@@ -70,6 +70,7 @@ task_to_keys = {
     
     "mrpc-noisy":("sentence1", "sentence2"),
     "rte-noisy":("sentence1", "sentence2"),
+    "nli-diag":("premise", "hypothesis")
 }
 
 
@@ -291,7 +292,7 @@ def main():
 
     # In distributed training, the load_dataset function guarantee that only one local process can concurrently
     # download the dataset.
-    if args.task_name is not None:
+    if args.task_name is not None and args.task_name != "nli-diag":
         # Downloading and loading a dataset from the hub.
         if args.task_name in ['snli']:
             # raw_datasets = load_dataset(args.task_name)
