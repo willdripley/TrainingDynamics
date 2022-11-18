@@ -70,7 +70,6 @@ task_to_keys = {
     
     "mrpc-noisy":("sentence1", "sentence2"),
     "rte-noisy":("sentence1", "sentence2"),
-
 }
 
 
@@ -209,6 +208,7 @@ def parse_args():
     parser.add_argument("--do_lwf", action="store_true")
     parser.add_argument("--train_with_sample_loss", default=None,  action="store_true")
     parser.add_argument("--continue_train_with_sample_loss", default=None, action="store_true")
+    parser.add_argument("--nli_diagnostics", type=bool, default=False)
     args = parser.parse_args()
 
     # Sanity checks
@@ -326,7 +326,7 @@ def main():
 
 
     # Labels
-    if args.task_name is not None:
+    if args.task_name is not None or args.nli_diagnostics:
         is_regression = args.task_name == "stsb"
         if not is_regression:
             if args.task_name == 'mnli':
