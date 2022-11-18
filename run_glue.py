@@ -861,6 +861,28 @@ def main():
     # e.g. 
     # The mismatch evaluation for MNLI task
     # The test set for tasks with an annotated test set, like SNLI
+    if args.task_name == "nli-diag":
+        # Final evaluation on mismatched validation set
+        eval_dataset = processed_datasets["validation"]
+        eval_dataloader = DataLoader(
+            eval_dataset, collate_fn=data_collator, batch_size=args.per_device_eval_batch_size
+        )
+        eval_dataloader = accelerator.prepare(eval_dataloader)
+
+        model.eval()
+        for step, batch in enumerate(eval_dataloader):
+            # batch中包含了idx字段，这里需要去除
+            batch = {k:v for k,v in batch.items() if k != 'idx'} 
+            outputs = model(**batch)
+            predictions = outputs.logits.argmax(dim=-1)
+            metric.add_batch(
+                predictions=accelerator.gather(predictions),
+                references=accelerator.gather(batch["labels"]),
+            )
+
+        eval_metric = metric.compute()
+        logger.info(f"accuracy: {eval_metric}")
+        log_to_file(eval_metric)
     if args.task_name == "mnli":
         log_to_file('\nmis_match evaluation for MNLI:')
         # Final evaluation on mismatched validation set
