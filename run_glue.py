@@ -862,27 +862,29 @@ def main():
     # The mismatch evaluation for MNLI task
     # The test set for tasks with an annotated test set, like SNLI
     if args.task_name == "nli-diag":
-        # Final evaluation on mismatched validation set
-        eval_dataset = processed_datasets["validation"]
-        eval_dataloader = DataLoader(
-            eval_dataset, collate_fn=data_collator, batch_size=args.per_device_eval_batch_size
-        )
-        eval_dataloader = accelerator.prepare(eval_dataloader)
-
-        model.eval()
+        samples_seen = 0
         for step, batch in enumerate(eval_dataloader):
-            # batch中包含了idx字段，这里需要去除
             batch = {k:v for k,v in batch.items() if k != 'idx'} 
-            outputs = model(**batch)
-            predictions = outputs.logits.argmax(dim=-1)
+            with torch.no_grad():
+                outputs = model(**batch)
+            predictions = outputs.logits.argmax(dim=-1) if not is_regression else outputs.logits.squeeze()
+            predictions, references = accelerator.gather((predictions, batch["labels"]))
+            # If we are in a multiprocess environment, the last batch has duplicates
+            if accelerator.num_processes > 1:
+                if step == len(eval_dataloader) - 1:
+                    predictions = predictions[: len(eval_dataloader.dataset) - samples_seen]
+                    references = references[: len(eval_dataloader.dataset) - samples_seen]
+                else:
+                    samples_seen += references.shape[0]
             metric.add_batch(
-                predictions=accelerator.gather(predictions),
-                references=accelerator.gather(batch["labels"]),
+                predictions=predictions,
+                references=references,
             )
 
         eval_metric = metric.compute()
-        logger.info(f"accuracy: {eval_metric}")
+        logger.info(f"***Evaluation***: {eval_metric}")
         log_to_file(eval_metric)
+        
     if args.task_name == "mnli":
         log_to_file('\nmis_match evaluation for MNLI:')
         # Final evaluation on mismatched validation set
