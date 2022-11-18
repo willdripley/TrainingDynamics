@@ -503,6 +503,7 @@ def main():
         if "label" in examples:
             if label_to_id is not None:
                 # Map labels to IDs (not necessary for GLUE tasks)
+                print('asdf label_to_id: ', label_to_id.items())
                 result["labels"] = [label_to_id[l] for l in examples["label"]]
             else:
                 # In all cases, rename the column to labels because the model will expect that.
